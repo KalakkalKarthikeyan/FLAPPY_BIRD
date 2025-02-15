@@ -2,7 +2,7 @@ const bird = document.getElementById("bird");
 const gameContainer = document.getElementById("game-container");
 
 let birdY = 200;
-let gravity = 2;
+let gravity = 8;
 let velocity = 0;
 let isJumping = false;
 
