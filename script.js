@@ -1,8 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const bird = document.getElementById("bird");
     const gameContainer = document.getElementById("game-container");
+    const scoreboard = document.getElementById("score");
+    const highScoreBoard = document.getElementById("high-score");
+    const gameOverScreen = document.getElementById("game-over");
+    const finalScoreDisplay = document.getElementById("final-score");
+    const restartBtn = document.getElementById("restart-btn");
 
-    let birdY = 100;
+    let birdY = 200;
     let velocity = 0;
     let gravity = 0.3;
     let jumpStrength = -6;
@@ -14,8 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let pipeGap = 120;
     let pipeSpeed = 2;
     let score = 0;
+    let highScore = localStorage.getItem("flappyHighScore") || 0;
+    highScoreBoard.textContent = highScore;
 
-    // 🦅 Bird Jump Function
     function jump() {
         if (gameRunning) {
             velocity = jumpStrength;
@@ -33,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
         jump();
     });
 
-    // 🏗 Create Pipes
     function createPipe() {
         let topHeight = Math.random() * 150 + 50;
         let bottomHeight = 500 - topHeight - pipeGap;
@@ -54,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
         pipes.push({ topPipe, bottomPipe, x: 400 });
     }
 
-    // 🎮 Game Loop
     function gameLoop() {
         if (!gameRunning) return;
 
@@ -62,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (velocity > maxFallSpeed) velocity = maxFallSpeed;
         birdY += velocity;
 
-        // Prevent bird from going out of bounds
         if (birdY >= gameContainer.clientHeight - 40) {
             birdY = gameContainer.clientHeight - 40;
             velocity = 0;
@@ -74,13 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bird.style.top = birdY + "px";
 
-        // Move pipes and check for collisions
         for (let i = 0; i < pipes.length; i++) {
             pipes[i].x -= pipeSpeed;
             pipes[i].topPipe.style.left = pipes[i].x + "px";
             pipes[i].bottomPipe.style.left = pipes[i].x + "px";
 
-            // Collision detection
             if (
                 pipes[i].x < 90 &&
                 pipes[i].x > 50 &&
@@ -90,26 +91,34 @@ document.addEventListener("DOMContentLoaded", function () {
                 gameOver();
             }
 
-            // Remove pipes that go off-screen
             if (pipes[i].x < -pipeWidth) {
                 gameContainer.removeChild(pipes[i].topPipe);
                 gameContainer.removeChild(pipes[i].bottomPipe);
                 pipes.splice(i, 1);
                 score++;
+                scoreboard.textContent = score;
             }
         }
 
         requestAnimationFrame(gameLoop);
     }
 
-    // 💀 Game Over
     function gameOver() {
         gameRunning = false;
-        alert("Game Over! Score: " + score);
-        location.reload();
+        gameOverScreen.style.display = "flex";
+        finalScoreDisplay.textContent = score;
+
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("flappyHighScore", highScore);
+            highScoreBoard.textContent = highScore;
+        }
     }
 
-    // 🎯 Start Game
+    restartBtn.addEventListener("click", function () {
+        location.reload();
+    });
+
     setInterval(createPipe, 2000);
     gameLoop();
 });
