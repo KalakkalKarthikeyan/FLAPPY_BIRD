@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let birdY = 200;
     let velocity = 0;
-    let gravity = 2;  
-    let jumpStrength = -7; 
-    let maxFallSpeed = 5; 
+    let gravity = 0.5;
+    let jumpStrength = -7;
+    let maxFallSpeed = 5;
     let gameRunning = true;
 
     let pipes = [];
@@ -15,21 +15,25 @@ document.addEventListener("DOMContentLoaded", function () {
     let pipeSpeed = 2;
     let score = 0;
 
-    // 🦅 Bird Jump Function (Now Works)
+    // 🦅 Bird Jump Function
     function jump() {
         if (gameRunning) {
-            velocity = jumpStrength;  // Apply jump strength
+            velocity = jumpStrength;
         }
     }
 
-    // ✅ Event Listener for Jump (Spacebar or Arrow Up)
+    // ✅ Add Keyboard & Touch Controls
     document.addEventListener("keydown", function (event) {
         if (event.code === "Space" || event.code === "ArrowUp") {
             jump();
         }
     });
 
-    // Function to create pipes
+    document.addEventListener("touchstart", function () {
+        jump();
+    });
+
+    // 🏗 Create Pipes
     function createPipe() {
         let topHeight = Math.random() * 150 + 50;
         let bottomHeight = 500 - topHeight - pipeGap;
@@ -50,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         pipes.push({ topPipe, bottomPipe, x: 400 });
     }
 
-    // Game Loop (Smooth Falling & Collision)
+    // 🎮 Game Loop
     function gameLoop() {
         if (!gameRunning) return;
 
@@ -98,14 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
         requestAnimationFrame(gameLoop);
     }
 
-    // Game Over Function
+    // 💀 Game Over
     function gameOver() {
         gameRunning = false;
         alert("Game Over! Score: " + score);
         location.reload();
     }
 
-    // Start game
+    // 🎯 Start Game
     setInterval(createPipe, 2000);
     gameLoop();
 });
