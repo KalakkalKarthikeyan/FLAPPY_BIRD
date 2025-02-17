@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let velocity = 0;
     let gravity = 0.3;
     let jumpStrength = -6;
-    let maxFallSpeed = 3;
+    let maxFallSpeed = 2;
     let gameRunning = true;
 
     let pipes = [];
