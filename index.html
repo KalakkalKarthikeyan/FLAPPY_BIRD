@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird 🐦‍⬛</title>
+    <title>Flappy Bird</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
+        <div id="scoreboard">Score: <span id="score">0</span> | High Score: <span id="high-score">0</span></div>
         <div id="bird">🐦‍⬛</div>
+        <div id="game-over">
+            <h2>Game Over</h2>
+            <p>Score: <span id="final-score">0</span></p>
+            <button id="restart-btn">Restart</button>
+        </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
