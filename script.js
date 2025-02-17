@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const bird = document.getElementById("bird");
     const gameContainer = document.getElementById("game-container");
 
-    let birdY = 200;
+    let birdY = 100;
     let velocity = 0;
     let gravity = 0.3;
     let jumpStrength = -6;
