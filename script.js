@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const finalScoreDisplay = document.getElementById("final-score");
     const restartBtn = document.getElementById("restart-btn");
 
-    let birdY = 200;
+    let birdY = 100;
     let velocity = 0;
-    let gravity = 0.3;
+    let gravity = 0.2;
     let jumpStrength = -6;
     let maxFallSpeed = 2;
     let gameRunning = true;
