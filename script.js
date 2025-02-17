@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let birdY = 200;
     let velocity = 0;
-    let gravity = 0.5;
-    let jumpStrength = -7;
-    let maxFallSpeed = 5;
+    let gravity = 0.3;
+    let jumpStrength = -6;
+    let maxFallSpeed = 3;
     let gameRunning = true;
 
     let pipes = [];
