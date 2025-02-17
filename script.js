@@ -9,15 +9,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let birdY = 100;
     let velocity = 0;
-    let gravity = 0.2;
-    let jumpStrength = -6;
+    let gravity = 0.15;
+    let jumpStrength = -5;
     let maxFallSpeed = 2;
     let gameRunning = true;
 
     let pipes = [];
     let pipeWidth = 50;
     let pipeGap = 120;
-    let pipeSpeed = 2;
+    let pipeSpeed = 1.5; // Slower start
     let score = 0;
     let highScore = localStorage.getItem("flappyHighScore") || 0;
     highScoreBoard.textContent = highScore;
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // ✅ Add Keyboard & Touch Controls
+    // ✅ Keyboard & Touch Controls
     document.addEventListener("keydown", function (event) {
         if (event.code === "Space" || event.code === "ArrowUp") {
             jump();
@@ -41,22 +41,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createPipe() {
         let topHeight = Math.random() * 150 + 50;
-        let bottomHeight = 500 - topHeight - pipeGap;
+        let bottomHeight = gameContainer.clientHeight - topHeight - pipeGap;
 
         let topPipe = document.createElement("div");
         topPipe.classList.add("pipe", "top-pipe");
         topPipe.style.height = topHeight + "px";
-        topPipe.style.left = "400px";
+        topPipe.style.left = "100%";
 
         let bottomPipe = document.createElement("div");
         bottomPipe.classList.add("pipe", "bottom-pipe");
         bottomPipe.style.height = bottomHeight + "px";
-        bottomPipe.style.left = "400px";
+        bottomPipe.style.left = "100%";
 
         gameContainer.appendChild(topPipe);
         gameContainer.appendChild(bottomPipe);
 
-        pipes.push({ topPipe, bottomPipe, x: 400 });
+        pipes.push({ topPipe, bottomPipe, x: gameContainer.clientWidth });
     }
 
     function gameLoop() {
@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (velocity > maxFallSpeed) velocity = maxFallSpeed;
         birdY += velocity;
 
+        // Prevent bird from falling off
         if (birdY >= gameContainer.clientHeight - 40) {
             birdY = gameContainer.clientHeight - 40;
             velocity = 0;
@@ -77,6 +78,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bird.style.top = birdY + "px";
 
+        // Increase speed after score reaches 15
+        if (score >= 15) {
+            pipeSpeed = 2.5;
+        }
+
         for (let i = 0; i < pipes.length; i++) {
             pipes[i].x -= pipeSpeed;
             pipes[i].topPipe.style.left = pipes[i].x + "px";
@@ -86,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 pipes[i].x < 90 &&
                 pipes[i].x > 50 &&
                 (birdY < parseInt(pipes[i].topPipe.style.height) || 
-                 birdY > 500 - parseInt(pipes[i].bottomPipe.style.height) - 40)
+                 birdY > gameContainer.clientHeight - parseInt(pipes[i].bottomPipe.style.height) - 40)
             ) {
                 gameOver();
             }
@@ -122,3 +128,4 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(createPipe, 2000);
     gameLoop();
 });
+
