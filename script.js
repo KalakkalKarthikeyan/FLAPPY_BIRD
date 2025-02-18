@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let pipes = [];
     let pipeWidth = 50;
-    let pipeGap = 120;
+    let pipeGap = 160;
     let pipeSpeed = 1.5; // Slower start
     let score = 0;
     let highScore = localStorage.getItem("flappyHighScore") || 0;
