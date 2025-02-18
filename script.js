@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let birdY = 100;
     let velocity = 0;
-    let gravity = 0.15;
+    let gravity = 0.2;
     let jumpStrength = -5;
     let maxFallSpeed = 2;
     let gameRunning = true;
 
     let pipes = [];
     let pipeWidth = 50;
-    let pipeGap = 250;
+    let pipeGap = 180;
     let pipeSpeed = 1.5; // Slower start
     let score = 0;
     let highScore = localStorage.getItem("flappyHighScore") || 0;
@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
         bird.style.top = birdY + "px";
 
         // Increase speed after score reaches 15
-        if (score >= 15) {
-            pipeSpeed = 2.5;
+        if (score >= 50) {
+            pipeSpeed = 2.0;
         }
 
         for (let i = 0; i < pipes.length; i++) {
