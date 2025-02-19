@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let jumpStrength = -5;
     let maxFallSpeed = 2;
     let gameRunning = true;
-    let autoPlay = false;  // ✅ Auto-play mode flag
+    let passThroughPipes = false; // ✅ New variable to pass through pipes
 
     let pipes = [];
     let pipeWidth = 50;
@@ -31,19 +31,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ✅ Keyboard Controls
     document.addEventListener("keydown", function (event) {
-        if ((event.code === "Space" || event.code === "ArrowUp") && !autoPlay) {
+        if (event.code === "Space" || event.code === "ArrowUp") {
             jump();
         }
-        if (event.shiftKey && event.ctrlKey && event.code === "KeyZ") {
-            autoPlay = true;  // ✅ Enable Auto-play
+        if (event.ctrlKey && event.shiftKey && event.code === "KeyZ") {
+            passThroughPipes = true; // ✅ Enable cheat mode
         }
         if (event.code === "Enter") {
-            autoPlay = false;  // ❌ Disable Auto-play
+            passThroughPipes = false; // ✅ Disable cheat mode
         }
     });
 
     document.addEventListener("touchstart", function () {
-        if (!autoPlay) jump();
+        jump();
     });
 
     function createPipe() {
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         gameContainer.appendChild(topPipe);
         gameContainer.appendChild(bottomPipe);
 
-        pipes.push({ topPipe, bottomPipe, x: gameContainer.clientWidth, topHeight, bottomHeight });
+        pipes.push({ topPipe, bottomPipe, x: gameContainer.clientWidth });
     }
 
     function gameLoop() {
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bird.style.top = birdY + "px";
 
-        // Increase speed after score reaches 30
+        // Increase speed after score reaches 15
         if (score >= 30) {
             pipeSpeed = 2.7;
         }
@@ -95,19 +95,15 @@ document.addEventListener("DOMContentLoaded", function () {
             pipes[i].topPipe.style.left = pipes[i].x + "px";
             pipes[i].bottomPipe.style.left = pipes[i].x + "px";
 
-            // ✅ Auto-play logic: Jump when near a pipe
-            if (autoPlay && pipes[i].x < 100 && pipes[i].x > 50) {
-                if (birdY + 40 > pipes[i].topHeight && birdY < gameContainer.clientHeight - pipes[i].bottomHeight - 40) {
-                    jump();
+            if (!passThroughPipes) {
+                if (
+                    pipes[i].x < 90 &&
+                    pipes[i].x > 50 &&
+                    (birdY < parseInt(pipes[i].topPipe.style.height) || 
+                     birdY > gameContainer.clientHeight - parseInt(pipes[i].bottomPipe.style.height) - 40)
+                ) {
+                    gameOver();
                 }
-            }
-
-            if (
-                pipes[i].x < 90 &&
-                pipes[i].x > 50 &&
-                (birdY < pipes[i].topHeight || birdY > gameContainer.clientHeight - pipes[i].bottomHeight - 40)
-            ) {
-                gameOver();
             }
 
             if (pipes[i].x < -pipeWidth) {
