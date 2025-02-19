@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Increase speed after score reaches 15
         if (score >= 30) {
-            pipeSpeed = 2.7;
+            pipeSpeed = 2.0;
         }
 
         for (let i = 0; i < pipes.length; i++) {
