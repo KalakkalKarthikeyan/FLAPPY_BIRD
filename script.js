@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let jumpStrength = -5;
     let maxFallSpeed = 2;
     let gameRunning = true;
+    let autoMode = false; // Auto-mode toggle
 
     let pipes = [];
     let pipeWidth = 50;
@@ -23,15 +24,27 @@ document.addEventListener("DOMContentLoaded", function () {
     highScoreBoard.textContent = highScore;
 
     function jump() {
-        if (gameRunning) {
+        if (gameRunning && !autoMode) {
             velocity = jumpStrength;
         }
     }
 
-    // ✅ Keyboard & Touch Controls
+    // ✅ Keyboard Controls
     document.addEventListener("keydown", function (event) {
         if (event.code === "Space" || event.code === "ArrowUp") {
             jump();
+        }
+
+        // ✅ Enable Auto-Mode (Shift + Ctrl + A)
+        if (event.shiftKey && event.ctrlKey && event.code === "KeyA") {
+            autoMode = true;
+            console.log("Auto Mode Enabled");
+        }
+
+        // ✅ Disable Auto-Mode (Enter)
+        if (event.code === "Enter") {
+            autoMode = false;
+            console.log("Auto Mode Disabled");
         }
     });
 
@@ -56,15 +69,27 @@ document.addEventListener("DOMContentLoaded", function () {
         gameContainer.appendChild(topPipe);
         gameContainer.appendChild(bottomPipe);
 
-        pipes.push({ topPipe, bottomPipe, x: gameContainer.clientWidth });
+        pipes.push({ topPipe, bottomPipe, x: gameContainer.clientWidth, topHeight, bottomHeight });
     }
 
     function gameLoop() {
         if (!gameRunning) return;
 
-        velocity += gravity;
-        if (velocity > maxFallSpeed) velocity = maxFallSpeed;
-        birdY += velocity;
+        if (!autoMode) {
+            velocity += gravity;
+            if (velocity > maxFallSpeed) velocity = maxFallSpeed;
+            birdY += velocity;
+        } else {
+            // ✅ Auto-move to avoid pipes
+            for (let i = 0; i < pipes.length; i++) {
+                if (pipes[i].x > 60 && pipes[i].x < 120) { 
+                    // If near a pipe, adjust position
+                    if (birdY > pipes[i].topHeight + 50) {
+                        velocity = jumpStrength; // Jump
+                    }
+                }
+            }
+        }
 
         // Prevent bird from falling off
         if (birdY >= gameContainer.clientHeight - 40) {
@@ -78,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bird.style.top = birdY + "px";
 
-        // Increase speed after score reaches 15
+        // Increase speed after score reaches 30
         if (score >= 30) {
             pipeSpeed = 2.7;
         }
@@ -88,13 +113,15 @@ document.addEventListener("DOMContentLoaded", function () {
             pipes[i].topPipe.style.left = pipes[i].x + "px";
             pipes[i].bottomPipe.style.left = pipes[i].x + "px";
 
-            if (
-                pipes[i].x < 90 &&
-                pipes[i].x > 50 &&
-                (birdY < parseInt(pipes[i].topPipe.style.height) || 
-                 birdY > gameContainer.clientHeight - parseInt(pipes[i].bottomPipe.style.height) - 40)
-            ) {
-                gameOver();
+            if (!autoMode) {
+                if (
+                    pipes[i].x < 90 &&
+                    pipes[i].x > 50 &&
+                    (birdY < parseInt(pipes[i].topPipe.style.height) || 
+                     birdY > gameContainer.clientHeight - parseInt(pipes[i].bottomPipe.style.height) - 40)
+                ) {
+                    gameOver();
+                }
             }
 
             if (pipes[i].x < -pipeWidth) {
