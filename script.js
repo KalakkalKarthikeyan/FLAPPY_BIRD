@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let pipes = [];
     let pipeWidth = 50;
     let pipeGap = 170;
-    let pipeSpeed = 2.0; // Slower start
+    let pipeSpeed = 1.5; // Slower start
     let score = 0;
     let highScore = localStorage.getItem("flappyHighScore") || 0;
     highScoreBoard.textContent = highScore;
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Increase speed after score reaches 15
         if (score >= 30) {
-            pipeSpeed = 3.5;
+            pipeSpeed = 2.7;
         }
 
         for (let i = 0; i < pipes.length; i++) {
