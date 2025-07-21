@@ -10,7 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url("https://raw.githubusercontent.com/KalakkalKarthikeyan/FLAPPY_BIRD/refs/heads/main/background.png"); /* Replace with actual link */
+    background-image: url("https://raw.githubusercontent.com/KalakkalKarthikeyan/FLAPPY_BIRD/refs/heads/main/Background.png"); /* Replace with actual link */
     background-size: cover;
     overflow: hidden;
 }
